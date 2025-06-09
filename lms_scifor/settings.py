@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL='accounts.CustomUser'
+
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL="no-reply@lms.com"
 
 
 # Static files (CSS, JavaScript, Images)

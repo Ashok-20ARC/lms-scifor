@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 class IsStudent(BasePermission):
@@ -19,3 +20,20 @@ class IsEmailVerified(BasePermission):
     """Allows access only if user's email is verified."""
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_email_verified
+=======
+from rest_framework.permissions import BasePermission,SAFE_METHODS
+
+class IsStudent(BasePermission):
+    """ Allows access only to authenticated users with the role 'student'. """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role=="student"
+    
+class IsStaff(BasePermission):
+    """ Allow access only to authenticated users with the role 'staff'. """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role=="staff"
+    
+class IsAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role=="admin"
+>>>>>>> 35b384cf718cf4f5eaed9d1bf3a70e71aec60e85

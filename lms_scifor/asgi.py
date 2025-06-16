@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
 """
 
 import os
+<<<<<<< HEAD
 import sys
 import logging
 from django.core.asgi import get_asgi_application
@@ -26,3 +27,11 @@ logger.info("Starting ASGI application...")
 # Initialize ASGI application
 application = get_asgi_application()
 
+=======
+
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lms_scifor.settings')
+
+application = get_asgi_application()
+>>>>>>> 35b384cf718cf4f5eaed9d1bf3a70e71aec60e85

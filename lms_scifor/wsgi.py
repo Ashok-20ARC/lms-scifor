@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
+<<<<<<< HEAD
 import sys
 import logging
 from django.core.wsgi import get_wsgi_application
@@ -24,4 +25,11 @@ logger.setLevel(logging.INFO)
 logger.info("Starting WSGI application...")
 
 # Get the WSGI application
+=======
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lms_scifor.settings')
+
+>>>>>>> 35b384cf718cf4f5eaed9d1bf3a70e71aec60e85
 application = get_wsgi_application()

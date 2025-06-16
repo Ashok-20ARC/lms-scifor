@@ -15,7 +15,7 @@ from .serializers import (
     RegisterSerializer,
     LoginSerializer,
     UserSerializer,
-    Tokenserializer,
+    TokenSerializer,
 )
 from django.contrib.auth import login as auth_login
 

@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 from django.conf import settings
 from .models import CustomUser
 
-<<<<<<< HEAD
 @receiver(post_save, sender=CustomUser)
 def assign_user_group(sender, instance, created, **kwargs):
     """
@@ -23,21 +22,3 @@ def assign_user_group(sender, instance, created, **kwargs):
         if group_name:
             group, _ = Group.objects.get_or_create(name=group_name)
             instance.groups.add(group)
-=======
-@receiver(post_save,sender=CustomUser)
-def assign_user_group(sender,instance,created,**kwargs):
-    """ Assign user to a group based on their role. """
-    if created:
-        role_group_map={
-            "student":"Students",
-            "staff":"Staff",
-            "admin":"Admins",
-        }
-
-        role=instance.role
-        group_name=role_group_map.get(role)
-
-        if group_name:
-            group, _ = Group.objects.get_or_create(name=group_name)
-            instance.groups.add(group)
->>>>>>> 35b384cf718cf4f5eaed9d1bf3a70e71aec60e85

@@ -1,63 +1,49 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
+from django.utils import timezone
 
-class CustomUserAdmin(UserAdmin):
-<<<<<<< HEAD
-    model = CustomUser
-    list_display = (
-        'email', 'first_name', 'last_name', 'role',
-        'is_email_verified', 'is_staff', 'is_active'
-    )
-    list_filter = (
-        'role', 'is_email_verified', 'is_staff', 'is_active'
-    )
-    ordering = ('email',)
-    search_fields = ('email', 'first_name', 'last_name')
 
-    fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal Info', {'fields': ('first_name', 'last_name', 'role')}),
-        ('Verification', {'fields': ('is_email_verified',)}),
-        ('Permissions', {
-            'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions'),
-        }),
-    )
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, first_name, last_name, role, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, first_name=first_name, last_name=last_name, role=role, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': (
-                'email', 'first_name', 'last_name', 'role',
-                'password1', 'password2',
-                'is_staff', 'is_active', 'is_email_verified'
-            )
-        }),
+    def create_superuser(self, email, first_name, last_name, role='admin', password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, first_name, last_name, role, password, **extra_fields)
+
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = (
+        ('student', 'Student'),
+        ('staff', 'Staff'),
+        ('admin', 'Admin'),
     )
 
-    def has_change_permission(self, request, obj=None):
-        return True
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-admin.site.register(CustomUser, CustomUserAdmin)
-=======
-    model=CustomUser
-    list_display=('email','first_name','last_name','role','is_staff','is_active')
-    list_filter=('role','is_staff','is_active')
-    ordering=('email',)
-    search_fields=('email','first_name','last_name')
-    fieldsets=(
-        (None,{'fields':('email','password')}),
-        ('Permissions',{'fields':('role','is_staff','is_active','is_superuser')}), #optional -> 'groups','user_permissions'
-    )
-    add_fieldsets=(
-        (None,{
-            'classes':('wide',),
-            'fields':('email','first_name','last_name','role','password1','password2','is_staff','is_active')
-        }),
-    )
+    #  For email verification
+    is_email_verified = models.BooleanField(default=False)
 
-    def has_change_permission(self, request, obj = None):
-        return True
+    # Django built-in flags
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
-admin.site.register(CustomUser,CustomUserAdmin)
->>>>>>> 35b384cf718cf4f5eaed9d1bf3a70e71aec60e85
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'role']
+
+    def __str__(self):
+        return self.email

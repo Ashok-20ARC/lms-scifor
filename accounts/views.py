@@ -16,6 +16,8 @@ from .serializers import (
     LoginSerializer,
     UserSerializer,
     TokenSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer
 )
 from django.contrib.auth import login as auth_login
 
@@ -144,6 +146,7 @@ class GoogleLoginView(APIView):
 # ✅ Password Reset Request
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
+    serializer_class=PasswordResetRequestSerializer
 
     def post(self, request):
         email = request.data.get("email")
@@ -154,7 +157,7 @@ class PasswordResetRequestView(APIView):
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = token_generator.make_token(user)
-        reset_url = f"https://yourfrontend.com/reset-password/{uid}/{token}/"
+        reset_url = f"http://127.0.0.1:8000/api/password-reset-confirm/{uid}/{token}/"
 
         send_mail(
             "Reset your password",

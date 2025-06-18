@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Send email verification
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = token_generator.make_token(user)
-        verify_url = f"https://yourdomain.com/verify-email/{uid}/{token}/"
+        verify_url = f"https://localhost:8000/verify-email/{uid}/{token}/"
 
         send_mail(
             "Verify Your Email",

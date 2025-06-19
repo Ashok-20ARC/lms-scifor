@@ -106,17 +106,14 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# without SMTP
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# # ✅ Gmail SMTP email settings for verification and password reset
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your_gmail@gmail.com'  # ⬅ Replace this
-# EMAIL_HOST_PASSWORD = 'your_app_password'  # ⬅ Use Gmail App Password
-# DEFAULT_FROM_EMAIL = 'your_gmail@gmail.com'
+# ✅ Gmail SMTP email settings for verification and password reset
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ashokpython20@gmail.com'  # ⬅ Replace this
+EMAIL_HOST_PASSWORD = 'btdh vadv nchp bbfm '  # ⬅ Use Gmail App Password
+DEFAULT_FROM_EMAIL = 'ashokpython20@gmail.com'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'

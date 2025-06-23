@@ -16,14 +16,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "role"]
 
 class RegisterSerializer(serializers.ModelSerializer):
+    confirm_password=serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ["email", "password", "role"]
+        fields = ["full_name","email","phone_number","date_of_birth", "role", "password","confirm_password"]
         extra_kwargs = {"password": {"write_only": True}}
+    
+    def validate(self,attrs):
+        if attrs["password"]!=attrs["confirm_password"]:
+            raise serializers.ValidationError({"confirm_password":"Passwords do not match."})
+        return attrs
 
     def create(self, validated_data):
+        validated_data.pop("confirm_password")
+
         user = User.objects.create_user(
+            full_name=validated_data["full_name"],
             email=validated_data["email"],
+            phone_number=validated_data["phone_number"],
+            date_of_birth=validated_data["date_of_birth"],
             password=validated_data["password"],
             role=validated_data.get("role", "student"),
             is_active=False
@@ -32,7 +44,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Send email verification
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = token_generator.make_token(user)
-        verify_url = f"https://localhost:8000/verify-email/{uid}/{token}/"
+        verify_url = f"http://127.0.0.1:8000/api/verify-email/{uid}/{token}/"
 
         send_mail(
             "Verify Your Email",

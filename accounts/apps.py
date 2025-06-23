@@ -10,6 +10,3 @@ class AccountsConfig(AppConfig):
     def ready(self):
         import accounts.signals  # Signal for email verification, etc.
 
-    def ready(self):
-        import accounts.signals
-

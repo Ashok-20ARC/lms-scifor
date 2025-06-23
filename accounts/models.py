@@ -34,8 +34,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+    full_name = models.CharField(max_length=100, blank=True)
+    phone_number=models.CharField(max_length=15,blank=True)
+    date_of_birth=models.DateField(null=True,blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="student")
 
     #  For email verification and access control
@@ -45,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["first_name", "last_name", "role"]
+    REQUIRED_FIELDS = ["full_name", "role"]
 
     objects = CustomUserManager()
 

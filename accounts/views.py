@@ -81,13 +81,16 @@ class UserProfileView(generics.RetrieveAPIView):
 # ✅ HTML-Based Signup Page (optional)
 def signup_view(request):
     if request.method == 'POST':
+        full_name=request.POST['fullname']
         email = request.POST['email']
+        phone_number=request.POST['phone_number']
+        date_of_birth=request.POST['date_of_birth']
         password = request.POST['password']
 
         if User.objects.filter(email=email).exists():
             return HttpResponse("Email already registered.")
 
-        user = User.objects.create_user(email=email, password=password, is_active=False)
+        user = User.objects.create_user(full_name=full_name,email=email,phone_number=phone_number,date_of_birth=date_of_birth, password=password, is_active=False)
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = token_generator.make_token(user)

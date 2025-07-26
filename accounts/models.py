@@ -39,8 +39,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_of_birth=models.DateField(null=True,blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="student")
 
-    #  For email verification and access control
-    is_email_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)

@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #  All authentication-related routes from the accounts app
-    path('', include('accounts.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 

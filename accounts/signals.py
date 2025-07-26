@@ -16,9 +16,10 @@ def assign_user_group(sender, instance, created, **kwargs):
             "admin": "Admins",
         }
 
-        role = instance.role
-        group_name = role_group_map.get(role)
+        group_name = role_group_map.get(instance.role)
 
         if group_name:
             group, _ = Group.objects.get_or_create(name=group_name)
             instance.groups.add(group)
+        else:
+            raise ValueError(f"Invalid role '{instance.role}' for user {instance.email}")

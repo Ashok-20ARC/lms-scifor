@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'courses',
 ]
 
 REST_FRAMEWORK = {
@@ -130,3 +131,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+MEDIA_ROOT=BASE_DIR/'media'
+MEDIA_URL='/media/'

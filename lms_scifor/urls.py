@@ -22,5 +22,6 @@ urlpatterns = [
 
     #  All authentication-related routes from the accounts app
     path('accounts/', include('accounts.urls')),
+    path('courses/',include('courses.urls')),
 ]
 

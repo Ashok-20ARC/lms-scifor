@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser,StaffProfile
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -31,3 +31,7 @@ class CustomUserAdmin(UserAdmin):
         return super().has_delete_permission(request, obj)
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+@admin.register(StaffProfile)
+class StaffProfileAdmin(admin.ModelAdmin):
+    list_display=('user','has_course_management_access','has_content_management_access')

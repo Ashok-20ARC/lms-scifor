@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -50,3 +51,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.email} ({self.role})"
+    
+class StaffProfile(models.Model):
+    user=models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name="staffprofile")
+    has_course_management_access=models.BooleanField(default=False)
+    has_batch_management_access=models.BooleanField(default=False)
+    has_content_management_access=models.BooleanField(default=False)
+    has_announcement_management_access=models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.email} - Staff Profile"

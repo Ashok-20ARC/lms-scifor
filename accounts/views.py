@@ -11,6 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
+from .models import StaffProfile
+from .permissions import IsAdminUser
 
 from .serializers import (
     RegisterSerializer,
@@ -19,7 +21,8 @@ from .serializers import (
     TokenSerializer,
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer,
+    StaffProfileSerializer
 )
 from django.contrib.auth import login as auth_login
 
@@ -150,3 +153,64 @@ class ChangePasswordView(APIView):
             serializer.save()
             return Response({"message":"Password changed successfully."},status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+#-------Staff------------
+
+class StaffListCreateAPIView(APIView):
+    permission_classes=[IsAdminUser]
+
+    def get(self,request):
+        staff_profiles=StaffProfile.objects.all()
+        serializer=StaffProfileSerializer(staff_profiles,many=True)
+        return Response(serializer.data)
+    
+    def post(self,request):
+        user_id=request.data.get('user')
+        try:
+            user=User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response({"error":"User not found"},status=404)
+        
+        if StaffProfile.objects.filter(user=user).exists():
+            return Response({'error':'Staff profile already exists for this user'},status=400)
+        
+        data=request.data.copy()
+        data['user']=user.id
+        serializer=StaffProfileSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=400)
+
+class StaffDetailAPIView(APIView):
+    permission_classes=[IsAdminUser]
+
+    def get_object(self,pk):
+        try:
+            return StaffProfile.objects.get(pk=pk)
+        except StaffProfile.DoesNotExist:
+            return None
+        
+    def get(self,request,pk):
+        profile=self.get_object(pk)
+        if not profile:
+            return Response({'error':'Staff not found'},status=404)
+        serializer=StaffProfileSerializer(profile)
+        return Response(serializer.data)
+    
+    def patch(self,request,pk):
+        profile=self.get_object(pk)
+        if not profile:
+            return Response({'error':'Staff not found'},status=404)
+        serializer=StaffProfileSerializer(profile,data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
+    
+    def delete(self,request,pk):
+        profile=self.get_object(pk)
+        if not profile:
+            return Response({'error':'Staff not found'},status=404)
+        profile.delete()
+        return Response({'message':'staff deleted'},status=204)

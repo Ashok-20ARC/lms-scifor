@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import Group
 from django.conf import settings
-from .models import CustomUser
+from .models import CustomUser,StaffProfile
 
 @receiver(post_save, sender=CustomUser)
 def assign_user_group(sender, instance, created, **kwargs):
@@ -23,3 +23,8 @@ def assign_user_group(sender, instance, created, **kwargs):
             instance.groups.add(group)
         else:
             raise ValueError(f"Invalid role '{instance.role}' for user {instance.email}")
+
+@receiver(post_save,sender=settings.AUTH_USER_MODEL)
+def create_staff_profile(sender,instance,created,**kwargs):
+    if created and instance.is_staff:
+        StaffProfile.objects.create(user=instance)

@@ -22,3 +22,8 @@ class IsEmailVerified(BasePermission):
     """Allows access only if user's email is verified."""
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.is_active
+    
+class IsAdminUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_staff
+

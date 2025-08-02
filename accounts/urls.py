@@ -9,6 +9,8 @@ from .views import (
     PasswordResetConfirmView,
     ResendEmailVerificationView,
     ChangePasswordView,
+    StaffListCreateAPIView,
+    StaffDetailAPIView
 )
 
 urlpatterns = [
@@ -26,4 +28,8 @@ urlpatterns = [
 
     # Change password
     path("change-password/",ChangePasswordView.as_view(),name="change-password"),
+
+    # Staff
+    path('staffs/',StaffListCreateAPIView.as_view(),name='staff-list-create'),
+    path('staffs/<int:pk>/',StaffDetailAPIView.as_view(),name='staff-detail'),
 ]

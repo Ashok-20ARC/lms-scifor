@@ -9,13 +9,14 @@ from django.conf import settings
 import requests
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from .models import StaffProfile
 
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "email", "role"]
+        fields = ["id", "email","full_name", "role"]
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password=serializers.CharField(write_only=True)
@@ -182,3 +183,12 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+#------------------Staff Profile---------------------------
+
+class StaffProfileSerializer(serializers.ModelSerializer):
+    user=UserSerializer(read_only=True)
+
+    class Meta:
+        model=StaffProfile
+        fields='__all__'

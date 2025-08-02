@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.utils import timezone
 from datetime import timedelta
+from decimal import Decimal #updated
 
 class CourseCategory(models.Model):
     name=models.CharField(max_length=100,unique=True)
@@ -84,7 +85,7 @@ class Course(models.Model):
         
     def save(self,*args,**kwargs):
         if self.discounted_percentage and self.original_price:
-            self.discounted_price=self.original_price * (1-self.discounted_percentage/100)
+            self.discounted_price=self.original_price * (1-Decimal(self.discounted_percentage)/Decimal(100)) #updated
             super().save(*args,**kwargs)
 
     def __str__(self):

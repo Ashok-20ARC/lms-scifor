@@ -32,6 +32,9 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
-@admin.register(StaffProfile)
-class StaffProfileAdmin(admin.ModelAdmin):
-    list_display=('user','has_course_management_access','has_content_management_access')
+class StaffProfileAdmin(admin.ModelAdmin): # updated
+    def get_queryset(self, request):
+        qs=super().get_queryset(request)
+        return qs.filter(user__role='staff')
+
+admin.site.register(StaffProfile,StaffProfileAdmin)

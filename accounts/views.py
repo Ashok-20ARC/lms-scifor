@@ -160,7 +160,7 @@ class StaffListCreateAPIView(APIView):
     permission_classes=[IsAdminUser]
 
     def get(self,request):
-        staff_profiles=StaffProfile.objects.all()
+        staff_profiles=StaffProfile.objects.filter(user__role='staff') #updated
         serializer=StaffProfileSerializer(staff_profiles,many=True)
         return Response(serializer.data)
     
@@ -176,6 +176,7 @@ class StaffListCreateAPIView(APIView):
         
         data=request.data.copy()
         data['user']=user.id
+        data['role']='staff' #updated
         serializer=StaffProfileSerializer(data=data)
         if serializer.is_valid():
             serializer.save(user=user)
@@ -185,7 +186,7 @@ class StaffListCreateAPIView(APIView):
 class StaffDetailAPIView(APIView):
     permission_classes=[IsAdminUser]
 
-    def get_object(self,pk):
+    def get_object(self,pk,role='user__staff'): #updated
         try:
             return StaffProfile.objects.get(pk=pk)
         except StaffProfile.DoesNotExist:

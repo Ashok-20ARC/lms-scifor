@@ -56,7 +56,7 @@ class CourseReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=CourseReview
-        fields=['user_name','rating','comment','created_at']
+        fields=['course','user_name','rating','comment','created_at']
         read_only_fields=['user','created_at']
 
 class CourseDetailSerializer(serializers.ModelSerializer):
